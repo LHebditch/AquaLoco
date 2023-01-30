@@ -31,11 +31,10 @@ public class MissionManager : MonoBehaviour
     #endregion
 
     [SerializeField] public Mission[] genericMissions;
-    [SerializeField] public Mission[] uniqueMissions;
     [SerializeField] private UnityEvent OnMissionComplete;
 
-    private List<MissionId> completedMissions = new List<MissionId>();
-    private Queue<MissionId> queuedMissions = new Queue<MissionId>(); // queue to queue missions for selection
+    private List<Mission> completedMissions = new List<Mission>();
+    private Queue<Mission> queuedMissions = new Queue<Mission>(); // queue to queue missions for selection
 
     private int uniqueMissionsGiven = 0;
 
@@ -46,9 +45,9 @@ public class MissionManager : MonoBehaviour
     {
         if (queuedMissions.Count > 0 && uniqueMissionsGiven < 3)
         {
-            MissionId mId = queuedMissions.Dequeue();
+            Mission m = queuedMissions.Dequeue();
             uniqueMissionsGiven++;
-            return uniqueMissions.First(m => m.missoinId == mId);
+            return m;
         }
         // if we've given 2 unique missions, or none are queued then find a random one
         Mission[] missionsForLevel = genericMissions.Where(m => m.level <= level).ToArray();
@@ -60,19 +59,8 @@ public class MissionManager : MonoBehaviour
         return missionsForLevel[index];
     }
 
-    public void EnqueueMission(MissionId id)
+    public void EnqueueMission(Mission mission)
     {
-        queuedMissions.Enqueue(id);
-    }
-
-    public void CompleteMission(MissionId id)
-    {
-        completedMissions.Add(id);
-        uniqueMissionsGiven = 0;
-
-        if (OnMissionComplete != null)
-        {
-            OnMissionComplete.Invoke();
-        }
+        queuedMissions.Enqueue(mission);
     }
 }

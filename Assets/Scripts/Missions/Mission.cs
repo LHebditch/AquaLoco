@@ -9,10 +9,8 @@ public class Mission
 #if UNITY_EDITOR
     public string title;
 #endif
-    public MissionId missoinId;
+    public GameEvent[] gameEvents;
     public int level;
     [TextArea()]
     public string description;
-    public UnityEvent OnSelect;
-    public bool unique;
 }

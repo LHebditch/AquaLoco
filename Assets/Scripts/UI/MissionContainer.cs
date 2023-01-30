@@ -19,6 +19,9 @@ public class MissionContainer : MonoBehaviour
 
     public void SelectMission()
     {
-        mission.OnSelect?.Invoke();
+        foreach (GameEvent ev in mission.gameEvents)
+        {
+            ev.Raise();
+        }
     }
 }

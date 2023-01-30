@@ -5,13 +5,13 @@ using UnityEngine.Events;
 
 public class ObjectivePoint : MonoBehaviour
 {
-    [SerializeField] UnityEvent onEnter;
     [SerializeField] private bool active;
     [Header("Time in seconds that player needs to be in objective to trigger")]
     [SerializeField] private float requiredTimeInObjective = 0.5f;
+    [SerializeField] GameEvent[] gameEvents;
+    [SerializeField] ObjectivePoint nextObjective;
     
     private GameObject self;
-    private float runTime;
     private bool insideObjective = false;
     private float timeInObjective = 0f;
 
@@ -21,10 +21,8 @@ public class ObjectivePoint : MonoBehaviour
         self.SetActive(active);
     }
 
-
     private void Update()
     {
-        runTime += Time.deltaTime;
         if(insideObjective)
         {
             timeInObjective += Time.deltaTime;
@@ -39,8 +37,22 @@ public class ObjectivePoint : MonoBehaviour
             insideObjective = true;
             if (timeInObjective >= requiredTimeInObjective)
             {
-                onEnter.Invoke();
+                OnReached();
             }
+        }
+    }
+
+    private void OnReached()
+    {
+        foreach(GameEvent ev in gameEvents)
+        {
+            ev.Raise();
+        }
+        if (nextObjective != null)
+        {
+            Deactivate();
+            nextObjective.Activate();
+            PlayerManager.instance.UpdatePlayerObjective(nextObjective.transform);
         }
     }
 
