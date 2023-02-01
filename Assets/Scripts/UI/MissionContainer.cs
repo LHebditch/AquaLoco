@@ -21,7 +21,7 @@ public class MissionContainer : MonoBehaviour
     {
         foreach (GameEvent ev in mission.gameEvents)
         {
-            ev.Raise();
+            ev.Raise(this, null);
         }
     }
 }

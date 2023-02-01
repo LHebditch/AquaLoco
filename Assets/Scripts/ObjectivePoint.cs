@@ -8,8 +8,10 @@ public class ObjectivePoint : MonoBehaviour
     [SerializeField] private bool active;
     [Header("Time in seconds that player needs to be in objective to trigger")]
     [SerializeField] private float requiredTimeInObjective = 0.5f;
+    [Header("List of game events to be invoked when objective is reached")]
     [SerializeField] GameEvent[] gameEvents;
     [SerializeField] ObjectivePoint nextObjective;
+    [SerializeField] GameEvent setObjectiveEvent;
     
     private GameObject self;
     private bool insideObjective = false;
@@ -18,7 +20,13 @@ public class ObjectivePoint : MonoBehaviour
     private void Awake()
     {
         self = this.gameObject;
-        self.SetActive(active);
+        if(active)
+        {
+            Activate();
+        } else
+        {
+            Deactivate();
+        }
     }
 
     private void Update()
@@ -46,13 +54,13 @@ public class ObjectivePoint : MonoBehaviour
     {
         foreach(GameEvent ev in gameEvents)
         {
-            ev.Raise();
+            ev.Raise(this, null);
         }
+
         if (nextObjective != null)
         {
             Deactivate();
             nextObjective.Activate();
-            PlayerManager.instance.UpdatePlayerObjective(nextObjective.transform);
         }
     }
 
@@ -65,6 +73,7 @@ public class ObjectivePoint : MonoBehaviour
     public void Activate()
     {
         self.SetActive(true);
+        setObjectiveEvent.Raise(this, null);
     }
 
     public void Deactivate()

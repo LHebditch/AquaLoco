@@ -31,9 +31,7 @@ public class MissionManager : MonoBehaviour
     #endregion
 
     [SerializeField] public Mission[] genericMissions;
-    [SerializeField] private UnityEvent OnMissionComplete;
 
-    private List<Mission> completedMissions = new List<Mission>();
     private Queue<Mission> queuedMissions = new Queue<Mission>(); // queue to queue missions for selection
 
     private int uniqueMissionsGiven = 0;

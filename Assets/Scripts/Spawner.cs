@@ -25,14 +25,14 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Transform missionStartPrefab;
     [SerializeField] private SpawnLocation location;
     [Header("If using SPECIFIC location then provide position")]
-    [SerializeField] private Vector3 spawnPosition;
+    [SerializeField] private Transform spawnPosition;
 
     public void Spawn()
     {
         switch(location)
         {
             case SpawnLocation.SPECIFIC:
-                Instantiate(missionStartPrefab, spawnPosition, Quaternion.identity);
+                Instantiate(missionStartPrefab, spawnPosition.position, Quaternion.identity);
                 break;
             default:
                 throw new SpawnException("I do not know how to spawn here");

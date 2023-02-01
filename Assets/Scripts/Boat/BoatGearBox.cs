@@ -18,6 +18,7 @@ public class BoatGearBox : MonoBehaviour
     [SerializeField] float gear3;
     [SerializeField] float gear4;
     [SerializeField] float gear5;
+    [SerializeField] GameEvent throttleChangedEvent;
 
     public float maxSpeed = 0f;
 
@@ -49,6 +50,18 @@ public class BoatGearBox : MonoBehaviour
         }
         lastGear = currentGear;
         currentGear = nextGear;
+        throttleChangedEvent.Raise(this, currentGear);
+    }
+
+    public void ShiftToGear(int gear)
+    {
+        if (!gears.ContainsKey(gear))
+        {
+            return;
+        }
+        lastGear = currentGear;
+        currentGear = gear;
+        throttleChangedEvent.Raise(this, currentGear);
     }
 
     public BoatGear GetCurrentGear()

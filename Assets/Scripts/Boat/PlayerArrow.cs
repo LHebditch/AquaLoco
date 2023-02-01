@@ -7,9 +7,9 @@ public class PlayerArrow : MonoBehaviour
     [SerializeField] Transform objective;
     [SerializeField] GameObject arrowMesh;
 
-    public void SetObjective(Transform o)
+    public void SetObjective(Component o, object _)
     {
-        objective = o;
+        objective = o.transform;
     }
 
     private void FixedUpdate()
@@ -20,7 +20,9 @@ public class PlayerArrow : MonoBehaviour
             return;
         }
         arrowMesh.SetActive(true);
-        transform.LookAt(objective.position);
+        Vector3 p = objective.position;
+        p.y = transform.position.y;
+        transform.LookAt(p);
         Quaternion rot = transform.rotation;
         rot.x = 0;
         transform.rotation = rot;

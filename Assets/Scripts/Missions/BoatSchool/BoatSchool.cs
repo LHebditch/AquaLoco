@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class BoatSchool : MonoBehaviour
 {
-    [SerializeField] Transform startingObjectiove;
+    [SerializeField] ObjectivePoint startingObjectiove;
     [SerializeField] Mission boatSchoolMission;
-
-    void Start()
+    
+    public void HandlePlayerRating(Component c, object data)
     {
-        MissionManager.instance.EnqueueMission(boatSchoolMission);
+        if(c is PlayerBoat && (float)data < 0)
+        {
+            MissionManager.instance.EnqueueMission(boatSchoolMission);
+        }
     }
 
-    public void StartMission()
+    public void StartMission(Component component, object _)
     {
-        PlayerManager.instance.UpdatePlayerObjective(startingObjectiove);
-        startingObjectiove.gameObject.SetActive(true);
+        if (component is MissionContainer)
+        {
+            startingObjectiove.Activate();
+        }
     }
 }

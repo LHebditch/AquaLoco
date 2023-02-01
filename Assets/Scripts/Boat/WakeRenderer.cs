@@ -13,12 +13,12 @@ public class WakeRenderer : MonoBehaviour
 {
     private const int NUM_VERTICES = 6;
 
-    [SerializeField] private MeshFilter mFilter;
-    [SerializeField] private Transform backRightCorner;
-    [SerializeField] private Transform backLeftCorner;
-    [SerializeField] private int trailFrameLength = 3;
+    
+    public Transform backRightCorner { set; private get; }
+    public Transform backLeftCorner { set; private get; }
+    public  int trailFrameLength { set; private get; }
 
-
+    private MeshFilter mFilter;
     private Mesh mesh;
     private Vector3[] vertices;
     private int[] triangles;
@@ -29,6 +29,11 @@ public class WakeRenderer : MonoBehaviour
 
     private void Awake()
     {
+        mFilter = GetComponent<MeshFilter>();
+        if(mFilter == null)
+        {
+            mFilter = gameObject.AddComponent<MeshFilter>();
+        }
         mesh = new Mesh
         {
             name = "Boat wake mesh",

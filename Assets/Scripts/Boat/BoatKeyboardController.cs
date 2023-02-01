@@ -1,24 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Linq;
 
-
-public class BoatKeyboardController : MonoBehaviour
+public class BoatKeyboardController : BoatInputDevice
 {
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private BoatGearBox gearBox;
-    [SerializeField] private float gearShiftDelay = 0.25f;
-    [SerializeField] private float acceleration = 0.05f;
-    [SerializeField] private float turnSpeed = 0.1f;
-    [SerializeField] private float bankSpeed = 1f;
-    [SerializeField] private float maxBank = 20f;
-    [SerializeField] private Transform boatModel;
-
-    private float runTime = 0;
-    private float gearLastShifted = 0;
-    private float currentSpeed = 0;
+    private Keyboard input;
 
     private enum Directions
     {
@@ -36,119 +22,61 @@ public class BoatKeyboardController : MonoBehaviour
         { Directions.RIGHT, Key.D },
     };
 
-    private void Update()
+    private void Start()
     {
-        runTime += Time.deltaTime;
-    }
-
-    private void FixedUpdate()
-    {
-
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard != null)
+        input = Keyboard.current;
+        if (input == null)
         {
-            HandleInput(keyboard);
-            return;
+            Debug.LogWarning("No gamepad keyboard detected");
         }
-
-        throw new MissingComponentException("We got no fucking controls :0");
-
-    }
-
-    private void HandleInput(Keyboard input)
-    {
-        MoveBoat(input);
-        TurnBoat(input);
     }
 
     #region Movement
-    private void MoveBoat(Keyboard input)
+    public override int GetMovement()
     {
-        bool canShift = runTime >= (gearLastShifted + gearShiftDelay);
-
-        if (input[keyboardControls[Directions.FORWARD]].isPressed && canShift)
+        if (input[keyboardControls[Directions.FORWARD]].isPressed )
         {
-            gearBox.ShiftGear(1);
-            gearLastShifted = runTime;
+            return 1;
         }
 
-        if (input[keyboardControls[Directions.REVERSE]].isPressed && canShift)
+        if (input[keyboardControls[Directions.REVERSE]].isPressed)
         {
-            gearBox.ShiftGear(-1);
-            gearLastShifted = runTime;
+            return -1;
         }
-
-        Vector3 vel = UpdatedSpeed();
-        vel.y = rb.velocity.y; // preserver gravity
-        rb.velocity = vel;
+        return 0;
     }
 
-    private void TurnBoat(Keyboard input)
+    public override Vector3 GetRotation()
     {
         Vector3 rotation = Vector3.zero;
-        Vector3 bank = Vector3.zero;
         if (input[keyboardControls[Directions.LEFT]].isPressed)
         {
             rotation -= Vector3.up;
-            bank += Vector3.forward;
         }
 
         if (input[keyboardControls[Directions.RIGHT]].isPressed)
         {
             rotation += Vector3.up;
+        }
+
+        return rotation;
+    }
+
+    public override Vector3 GetBank()
+    {
+        Vector3 bank = Vector3.zero;
+        if (input[keyboardControls[Directions.LEFT]].isPressed)
+        {
+            bank += Vector3.forward;
+        }
+
+        if (input[keyboardControls[Directions.RIGHT]].isPressed)
+        {
             bank -= Vector3.forward;
         }
-
-
-        if(rotation == Vector3.zero)
-        {
-            // reset bank
-            if(boatModel.localRotation.z < 0)
-            {
-                bank += (Vector3.forward * 0.5f);
-            } else if(boatModel.localRotation.z > 0)
-            {
-                bank -= (Vector3.forward * 0.5f);
-            }
-
-            if(Mathf.Abs(boatModel.localRotation.z) < 0.01f)
-            {
-                Quaternion t = boatModel.localRotation;
-                t.z = 0;
-                bank = Vector3.zero;
-                boatModel.localRotation = t;
-            }
-        }
-
-        // apply banking 
-        transform.RotateAround(transform.position, rotation, turnSpeed);
-        boatModel.Rotate(bank * bankSpeed);
-        Quaternion existingRot = boatModel.localRotation;
-        existingRot.z = Mathf.Clamp(existingRot.z, -maxBank, maxBank);
-        boatModel.localRotation = existingRot;
+        return bank;
     }
     #endregion
 
-    #region utils
-    public Vector3 UpdatedSpeed()
-    {
-        BoatGear currentGear = gearBox.GetCurrentGear();
-        BoatGear lastGear = gearBox.GetLastGear();
-        float dir = lastGear.gear < currentGear.gear ? 1 : -1;
-        float newSpeed = currentSpeed + (acceleration * dir);
-        float diff = Mathf.Abs(newSpeed - currentGear.speed);
-
-        if (diff > 0.05f && !gearBox.IsMaxSpeed(newSpeed))
-        {
-            currentSpeed = newSpeed;
-        }
-
-        if(gearBox.IsMaxSpeed(currentSpeed))
-        {
-            currentSpeed = gearBox.maxSpeed;
-        }
-
-        return transform.forward * currentSpeed;
-    }
-    #endregion
+    
 }
