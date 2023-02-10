@@ -507,6 +507,8 @@ GameObject:
   - component: {fileID: 368849975}
   - component: {fileID: 368849976}
   - component: {fileID: 368849977}
+  - component: {fileID: 368849978}
+  - component: {fileID: 368849979}
   m_Layer: 5
   m_Name: AvailableMissions
   m_TagString: Untagged
@@ -592,7 +594,63 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 368849976}
         m_TargetAssemblyTypeName: AvailableMissionsDisplay, Assembly-CSharp
-        m_MethodName: UpdateBoatRating
+        m_MethodName: IncreaseBoatRating
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &368849978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368849973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1d512073e1f474692252150bbb00ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 3d29b7d123e42fa4a8e108f34920af6c, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 368849976}
+        m_TargetAssemblyTypeName: AvailableMissionsDisplay, Assembly-CSharp
+        m_MethodName: SelectMission
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &368849979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368849973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1d512073e1f474692252150bbb00ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 87b7b91eb507bda418f6fee15c4b12a5, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 368849976}
+        m_TargetAssemblyTypeName: AvailableMissionsDisplay, Assembly-CSharp
+        m_MethodName: CompleteMission
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -757,15 +815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3a80a4360dc134e82c09c3fabfe8af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  genericMissions:
-  - title: 'Sight seeing: Dolphins'
-    gameEvents: []
-    level: 0
-    description: We wanna see dolphins...waaah
-  - title: Taxi
-    gameEvents: []
-    level: 0
-    description: I'm late, i'm late for a very important date
+  genericMissions: []
 --- !u!1 &524993752
 GameObject:
   m_ObjectHideFlags: 0
@@ -1885,6 +1935,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2989305901089966897, guid: a02ca9ea95a69ff4ba2307d8a0fab5de, type: 3}
+      propertyPath: floaters.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2989305901089966898, guid: a02ca9ea95a69ff4ba2307d8a0fab5de, type: 3}
+      propertyPath: m_Constraints
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 2989305901596338166, guid: a02ca9ea95a69ff4ba2307d8a0fab5de, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -1932,6 +1990,10 @@ PrefabInstance:
     - target: {fileID: 2989305901596338167, guid: a02ca9ea95a69ff4ba2307d8a0fab5de, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981089555661994520, guid: a02ca9ea95a69ff4ba2307d8a0fab5de, type: 3}
+      propertyPath: minTurbulence
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a02ca9ea95a69ff4ba2307d8a0fab5de, type: 3}

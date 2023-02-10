@@ -7,8 +7,9 @@ public class MissionContainer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI title;
     [SerializeField] TextMeshProUGUI description;
+    [SerializeField] GameEvent missionSelectgameEvent;
 
-    private Mission mission;
+    public Mission mission { get; private set; }
 
     public void SetMission(Mission m)
     {
@@ -19,9 +20,10 @@ public class MissionContainer : MonoBehaviour
 
     public void SelectMission()
     {
-        foreach (GameEvent ev in mission.gameEvents)
+        foreach (GameEvent ev in mission.onStartGameEvents)
         {
             ev.Raise(this, null);
         }
+        missionSelectgameEvent.Raise(this, null);
     }
 }

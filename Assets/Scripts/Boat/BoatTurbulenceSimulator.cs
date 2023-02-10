@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BoatTurbulenceSimulator : MonoBehaviour
 {
-    [SerializeField] Transform boatModel;
+    [SerializeField] Transform front;
     [SerializeField] BoatGearBox gearBox;
     [SerializeField] float minSpeedToHitTurbulence = 0f;
     [SerializeField] float minTurbulence;
@@ -14,6 +14,12 @@ public class BoatTurbulenceSimulator : MonoBehaviour
 
     private float runTime;
     private float nextAloudTurbulenceTime = 0;
+    private Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     private void Update()
     {
@@ -29,10 +35,12 @@ public class BoatTurbulenceSimulator : MonoBehaviour
                 return;
             }
             float turbulenceAmount = Random.Range(minTurbulence, maxTurbulence);
-            
+            float interval = Random.Range(minTurbulenceInterval, maxTurbulenceInterval);
 
-            
-            nextAloudTurbulenceTime = runTime + Random.Range(minTurbulenceInterval, maxTurbulenceInterval);
+            rb.AddForceAtPosition(Vector3.up * turbulenceAmount, front.position, ForceMode.Impulse);
+            // do sound
+            // do particles
+            nextAloudTurbulenceTime = runTime + interval;
         }
     }
 }

@@ -33,9 +33,16 @@ public class MissionManager : MonoBehaviour
     [SerializeField] public Mission[] genericMissions;
 
     private Queue<Mission> queuedMissions = new Queue<Mission>(); // queue to queue missions for selection
-
+    private Dictionary<int, Mission> blockedMissions = new Dictionary<int, Mission>();
     private int uniqueMissionsGiven = 0;
 
+    private void Start()
+    {
+        if (genericMissions == null)
+        {
+            genericMissions = new Mission[0];
+        }
+    }
     /**
      * get a random mission who's level is greater than or equal to the given level
      */
@@ -45,6 +52,10 @@ public class MissionManager : MonoBehaviour
         {
             Mission m = queuedMissions.Dequeue();
             uniqueMissionsGiven++;
+            if(blockedMissions.ContainsKey(m.GetHashCode()))
+            {
+                return GetRandomMission(level);
+            }
             return m;
         }
         // if we've given 2 unique missions, or none are queued then find a random one
@@ -53,12 +64,17 @@ public class MissionManager : MonoBehaviour
         {
             return null;
         }
-        int index = Random.Range(0, missionsForLevel.Length);  
+        int index = Random.Range(0, missionsForLevel.Length);
         return missionsForLevel[index];
     }
 
     public void EnqueueMission(Mission mission)
     {
         queuedMissions.Enqueue(mission);
+    }
+
+    public void BlockMission(Mission mission)
+    {
+        blockedMissions.Add(mission.GetHashCode(), mission);
     }
 }

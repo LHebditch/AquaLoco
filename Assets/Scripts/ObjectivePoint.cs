@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class ObjectivePoint : MonoBehaviour
 {
     [SerializeField] private bool active;
+    [SerializeField] private bool deactivateOnReached = false;
     [Header("Time in seconds that player needs to be in objective to trigger")]
     [SerializeField] private float requiredTimeInObjective = 0.5f;
     [Header("List of game events to be invoked when objective is reached")]
@@ -14,6 +15,7 @@ public class ObjectivePoint : MonoBehaviour
     [SerializeField] GameEvent setObjectiveEvent;
     
     private GameObject self;
+    private bool reached;
     private bool insideObjective = false;
     private float timeInObjective = 0f;
 
@@ -37,9 +39,12 @@ public class ObjectivePoint : MonoBehaviour
         }
     }
 
-
     private void OnTriggerStay(Collider other)
     {
+        if(reached)
+        {
+            return;
+        }
         if(other.tag == "Player")
         {
             insideObjective = true;
@@ -52,6 +57,7 @@ public class ObjectivePoint : MonoBehaviour
 
     private void OnReached()
     {
+        reached = true;
         foreach(GameEvent ev in gameEvents)
         {
             ev.Raise(this, null);
@@ -61,7 +67,13 @@ public class ObjectivePoint : MonoBehaviour
         {
             Deactivate();
             nextObjective.Activate();
+        } 
+        else if (deactivateOnReached)
+        {
+            Deactivate();
+            setObjectiveEvent.Raise(null, null);
         }
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -72,6 +84,7 @@ public class ObjectivePoint : MonoBehaviour
 
     public void Activate()
     {
+        reached = false;
         self.SetActive(true);
         setObjectiveEvent.Raise(this, null);
     }

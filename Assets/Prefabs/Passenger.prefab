@@ -13,8 +13,10 @@ GameObject:
   - component: {fileID: 4558520734182078748}
   - component: {fileID: 4558520734182078749}
   - component: {fileID: 4558520734182078746}
+  - component: {fileID: 8873027316749902199}
+  - component: {fileID: 2285999289538856862}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4558520734182078744}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.38, y: -1.66, z: 0.86}
-  m_LocalScale: {x: 11.09766, y: -1.7270296, z: 11.09766}
+  m_LocalPosition: {x: 0, y: -1.84, z: 0}
+  m_LocalScale: {x: 15, y: 0.7, z: 15}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4558520734814723282}
@@ -42,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4558520734182078744}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &4558520734182078748
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -111,13 +113,56 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   active: 1
+  deactivateOnReached: 0
   requiredTimeInObjective: 1
   gameEvents:
-  - {fileID: 11400000, guid: bdf65cc7398c04744ac4dd2140e4b627, type: 2}
-  - {fileID: 11400000, guid: 3d29b7d123e42fa4a8e108f34920af6c, type: 2}
   - {fileID: 11400000, guid: 6406a3eb91c1b0a40aac9e0b1757dd54, type: 2}
+  - {fileID: 11400000, guid: 10a206a0df3fd4d49b280af38241f1cf, type: 2}
   nextObjective: {fileID: 0}
   setObjectiveEvent: {fileID: 11400000, guid: c47dee6a471318149b09852f6bac5bfa, type: 2}
+--- !u!114 &8873027316749902199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4558520734182078744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b09c936bcdd9a8488d0e18d16770e64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  passengers:
+  - {fileID: 4558520734774560240}
+  passengerPickupEvent: {fileID: 11400000, guid: bdf65cc7398c04744ac4dd2140e4b627, type: 2}
+--- !u!114 &2285999289538856862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4558520734182078744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1d512073e1f474692252150bbb00ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 10a206a0df3fd4d49b280af38241f1cf, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8873027316749902199}
+        m_TargetAssemblyTypeName: PassengerPickupTrigger, Assembly-CSharp
+        m_MethodName: PickupPassenger
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4558520734774560140
 GameObject:
   m_ObjectHideFlags: 0

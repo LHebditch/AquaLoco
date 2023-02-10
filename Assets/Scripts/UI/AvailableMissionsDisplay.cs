@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
 
 public class AvailableMissionsDisplay : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class AvailableMissionsDisplay : MonoBehaviour
     private float boatStarRating = 0;
 
     private List<Mission> currentMissions = new List<Mission>();
+    private Mission activeMission;
 
     private void Start()
     {
@@ -17,21 +20,21 @@ public class AvailableMissionsDisplay : MonoBehaviour
 
     public void Open()
     {
-        // TODO: how do we behave if a mission is selected?
-        if(currentMissions.Count == 0)
+        if (activeMission == null)
         {
             Reload();
+        } 
+        else
+        {
+            // Display active mission
         }
     }
 
-    public void UpdateBoatRating(Component c, object data)
+    public void IncreaseBoatRating(Component c, object data)
     {
-        if(c is PlayerBoat && (
-            data is int ||
-            data is float
-        ))
+        if (data is int || data is float)
         {
-            boatStarRating = (float)data;
+            boatStarRating += Convert.ToSingle(data);
             Reload();
         } else
         {
@@ -41,23 +44,42 @@ public class AvailableMissionsDisplay : MonoBehaviour
 
     private void Reload()
     {
-        if (currentMissions.Count > 0) return;
-
-        currentMissions.Clear();
         MissionContainer[] containers = GetComponentsInChildren<MissionContainer>();
-        for(int i = 0; i < containers.Length; i++)
+        for (int i = 0; i < containers.Length; i++)
         {
             Destroy(containers[i].transform.gameObject);
         }
-        for(int i = 0; i < missionCount; i++)
+        for (int i = 0; i < missionCount - currentMissions.Count; i++)
         {
             Mission m = MissionManager.instance.GetRandomMission(boatStarRating);
             if (m != null)
             {
                 currentMissions.Add(m);
-                Transform t = Instantiate(missionSelectorPrefab, transform.position, Quaternion.identity, transform);
-                t.GetComponent<MissionContainer>().SetMission(m);
             }
         }
+
+        foreach(Mission m in currentMissions)
+        {
+            Transform t = Instantiate(missionSelectorPrefab, transform.position, Quaternion.identity, transform);
+            t.GetComponent<MissionContainer>().SetMission(m);
+        }
+    }
+
+    public void SelectMission(Component c, object _)
+    {
+        if(c is MissionContainer)
+        {
+            activeMission = (c as MissionContainer).mission;
+        }
+    }
+
+    public void CompleteMission(Component c, object _)
+    {
+        foreach(GameEvent ev in activeMission.onCompletionGameEvents)
+        {
+            ev.Raise(this, null);
+        }
+        currentMissions = currentMissions.Where(m => m.isUnique && m != activeMission).ToList();
+        activeMission = null;
     }
 }

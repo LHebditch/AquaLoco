@@ -9,7 +9,14 @@ public class PlayerArrow : MonoBehaviour
 
     public void SetObjective(Component o, object _)
     {
-        objective = o.transform;
+        if (o != null)
+        {
+            objective = o.transform;
+        } 
+        else
+        {
+            objective = null;
+        }
     }
 
     private void FixedUpdate()

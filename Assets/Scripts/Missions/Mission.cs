@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[System.Serializable]
-public class Mission
+[CreateAssetMenu(menuName = "Mission")]
+public class Mission: ScriptableObject
 {   
 #if UNITY_EDITOR
     public string title;
 #endif
-    public GameEvent[] gameEvents;
+    public GameEvent[] onStartGameEvents;
+    public GameEvent[] onCompletionGameEvents;
     public int level;
     [TextArea()]
     public string description;
+    public bool isUnique;
 }

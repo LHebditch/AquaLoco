@@ -187,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: {fileID: 466261023038987350}
   description: {fileID: 466261023872494856}
+  missionSelectgameEvent: {fileID: 11400000, guid: 3d29b7d123e42fa4a8e108f34920af6c, type: 2}
 --- !u!1 &466261023655649833
 GameObject:
   m_ObjectHideFlags: 0

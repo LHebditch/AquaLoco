@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class BoatSchool : MonoBehaviour
 {
-    [SerializeField] ObjectivePoint startingObjectiove;
+    [SerializeField] ObjectivePoint startingObjective;
     [SerializeField] Mission boatSchoolMission;
+    [SerializeField] GameEvent increaseRankEvent;
     
     public void HandlePlayerRating(Component c, object data)
     {
-        if(c is PlayerBoat && (float)data < 0)
+        if(c is PlayerBoat && (float)data >= 0)
         {
-            MissionManager.instance.EnqueueMission(boatSchoolMission);
+            MissionManager.instance.BlockMission(boatSchoolMission);
         }
     }
 
@@ -19,7 +20,12 @@ public class BoatSchool : MonoBehaviour
     {
         if (component is MissionContainer)
         {
-            startingObjectiove.Activate();
+            startingObjective.Activate();
         }
+    }
+
+    public void CompleteMission(Component c, object _)
+    {
+        increaseRankEvent.Raise(this, 1);
     }
 }
